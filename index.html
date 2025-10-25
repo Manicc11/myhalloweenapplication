@@ -1,136 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Spooky Text-to-Speech</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #1a001a; /* Dark purple/black for spooky theme */
-            color: #cc00cc; /* Eerie pink text */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👻 Azure Spooky Voice Generator 🔮</title>
+<style>
+  body {
+    background-color: #0b0010;
+    color: #ff33cc;
+    font-family: 'Creepster', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
 
-        .container {
-            background-color: #2c002c;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(204, 0, 204, 0.5); /* Glowing effect */
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-        }
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
 
-        h1 {
-            color: #ff6600; /* Orange highlight */
-            margin-bottom: 20px;
-        }
+  .container {
+    background: radial-gradient(circle at center, #200020 0%, #0b0010 100%);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 30px 5px #ff00ff66;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid #550055;
+  }
 
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 2px solid #660066;
-            border-radius: 5px;
-            background-color: #3d003d;
-            color: #fff;
-            font-size: 16px;
-            resize: vertical;
-            box-sizing: border-box;
-        }
+  h1 {
+    color: #ff6600;
+    text-shadow: 0 0 20px #ff3300;
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
 
-        button {
-            background-color: #ff6600;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease, transform 0.1s;
-        }
+  textarea {
+    width: 100%;
+    background-color: #300030;
+    border: 2px solid #660066;
+    border-radius: 8px;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    resize: vertical;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
 
-        button:hover {
-            background-color: #cc5200;
-            transform: scale(1.05);
-        }
+  button {
+    background-color: #ff6600;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+  }
 
-        button:disabled {
-            background-color: #444;
-            cursor: not-allowed;
-        }
-    </style>
+  button:hover {
+    background-color: #cc5200;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ff3300;
+  }
+
+  button:disabled {
+    background-color: #333;
+    cursor: not-allowed;
+  }
+</style>
 </head>
-<body>
 
-<div class="container">
-    <h1>😈 The Evil Voice Generator 🔪</h1>
-    <textarea id="spookyText" rows="6" placeholder="Type your chilling message here... (e.g., You will find only TRICKS here tonight.)"></textarea>
-    <button onclick="speakText()" id="speakButton">Speak in a Spooky Voice</button>
-</div>
+<body>
+  <div class="container">
+    <h1>😈 The Evil Voice Generator 🔥</h1>
+    <textarea id="spookyText" rows="6" placeholder="Type your terrifying words here..."></textarea>
+    <button id="speakButton" onclick="speakText()">Summon the Dark Voice</button>
+  </div>
 
 <script>
-    const textarea = document.getElementById('spookyText');
-    const speakButton = document.getElementById('speakButton');
-    
-    if (!('speechSynthesis' in window)) {
-        alert("Sorry, your browser doesn't support Text-to-Speech.");
-    }
+const textarea = document.getElementById('spookyText');
+const speakButton = document.getElementById('speakButton');
 
-    function speakText() {
-        const text = textarea.value.trim();
-        if (text === '') {
-            alert('Please enter some text to speak!');
-            return;
-        }
+// Load voices dynamically (some browsers load them async)
+window.speechSynthesis.onvoiceschanged = () => window.availableVoices = speechSynthesis.getVoices();
 
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-        }
+function speakText() {
+  const text = textarea.value.trim();
+  if (!text) {
+    alert('Enter some words... if you dare 👀');
+    return;
+  }
 
-        const utterance = new SpeechSynthesisUtterance(text);
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
 
-        // *** EVIL VOICE SETTINGS ***
-        // 0.5 is slow and deliberate.
-        utterance.rate = 0.5;
-        // 0.4 is very deep and menacing.
-        utterance.pitch = 0.4; 
-        
-        // OPTIONAL: Try to find a voice if you want a specific accent/gender
-        const voices = window.speechSynthesis.getVoices();
-        const deepVoice = voices.find(voice => 
-            voice.name.toLowerCase().includes('male') || 
-            voice.name.toLowerCase().includes('google us')
-        );
-        if (deepVoice) {
-            utterance.voice = deepVoice;
-        }
+  // Choose a deep male voice if available
+  const deepVoice = voices.find(v =>
+    v.name.toLowerCase().includes('male') ||
+    v.name.toLowerCase().includes('guy') ||
+    v.name.toLowerCase().includes('uk english male') ||
+    v.name.toLowerCase().includes('daniel')
+  );
+  if (deepVoice) utterance.voice = deepVoice;
 
-        // Event listeners for button state
-        utterance.onstart = () => {
-            speakButton.disabled = true;
-            speakButton.textContent = 'Speaking... (Fear the voice!)';
-        };
+  // Evil tone settings
+  utterance.pitch = 0.2;   // Very deep
+  utterance.rate = 0.4;    // Slow and sinister
+  utterance.volume = 1.0;  // Full volume
 
-        utterance.onend = () => {
-            speakButton.disabled = false;
-            speakButton.textContent = 'Speak in a Spooky Voice';
-        };
+  utterance.onstart = () => {
+    speakButton.disabled = true;
+    speakButton.textContent = '👁️ Summoning Darkness...';
+  };
 
-        utterance.onerror = (event) => {
-            console.error('Speech synthesis error:', event);
-            speakButton.disabled = false;
-            speakButton.textContent = 'Error Speaking (Try Again)';
-        };
+  utterance.onend = () => {
+    speakButton.disabled = false;
+    speakButton.textContent = 'Summon the Dark Voice';
+  };
 
-        window.speechSynthesis.speak(utterance);
-    }
+  utterance.onerror = (e) => {
+    console.error(e);
+    speakButton.disabled = false;
+    speakButton.textContent = 'Try Again';
+  };
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
 </script>
-
 </body>
 </html>
