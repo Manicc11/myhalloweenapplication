@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>😈 Real Spooky Voice Generator</title>
+<title>😈 Demon Voice Portal</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
   body {
@@ -15,6 +15,7 @@
     align-items: center;
     height: 100vh;
     margin: 0;
+    overflow: hidden;
   }
   .container {
     background: radial-gradient(circle at center, #200020 0%, #0a0010 100%);
@@ -61,6 +62,11 @@
     transform: scale(1.05);
     box-shadow: 0 0 20px #ff3300;
   }
+  footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
 </style>
 </head>
 
@@ -72,9 +78,10 @@
       <button onclick="speakText()">Summon the Voice</button>
       <button onclick="playLaugh()">💀 Evil Laugh</button>
     </div>
+    <footer>🩸 Dare to listen… if you can 🩸</footer>
   </div>
 
-  <!-- Preloaded scary sounds -->
+  <!-- Preloaded scary laughs (royalty-free) -->
   <audio id="laugh1" src="https://cdn.pixabay.com/download/audio/2023/02/14/audio_1c20cbad1e.mp3?filename=evil-laugh-112024.mp3"></audio>
   <audio id="laugh2" src="https://cdn.pixabay.com/download/audio/2023/03/01/audio_d17ff5f708.mp3?filename=creepy-evil-laugh-140268.mp3"></audio>
   <audio id="laugh3" src="https://cdn.pixabay.com/download/audio/2023/01/11/audio_1e7b8b1a8d.mp3?filename=evil-male-laugh-125649.mp3"></audio>
@@ -82,7 +89,7 @@
 <script>
 let lockedVoice = null;
 
-// Choose one consistent dark voice
+// Pick a consistent voice once voices load
 window.speechSynthesis.onvoiceschanged = () => {
   const voices = speechSynthesis.getVoices();
   lockedVoice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('english')) || voices[0];
@@ -91,15 +98,21 @@ window.speechSynthesis.onvoiceschanged = () => {
 function speakText() {
   const text = document.getElementById('spookyText').value.trim();
   if (!text) return alert('Summon something first...');
-  
+
   const utter = new SpeechSynthesisUtterance(text);
   utter.voice = lockedVoice || speechSynthesis.getVoices()[0];
   utter.pitch = 0.3;
-  utter.rate = 0.4;
+  utter.rate = 0.45;
   utter.volume = 1;
-  
+
+  // Speak and then trigger laugh
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
+
+  utter.onend = () => {
+    const delay = 500 + Math.random() * 1000; // Random delay for creepy effect
+    setTimeout(playLaugh, delay);
+  };
 }
 
 function playLaugh() {
