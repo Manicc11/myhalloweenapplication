@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>👻 Azure Spooky Voice Generator 🔮</title>
+<title>😈 Real Spooky Voice Generator</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
-
   body {
-    background-color: #0b0010;
+    background-color: #0a0010;
     color: #ff33cc;
     font-family: 'Creepster', Arial, sans-serif;
     display: flex;
@@ -17,38 +16,33 @@
     height: 100vh;
     margin: 0;
   }
-
   .container {
-    background: radial-gradient(circle at center, #200020 0%, #0b0010 100%);
+    background: radial-gradient(circle at center, #200020 0%, #0a0010 100%);
     padding: 40px;
     border-radius: 15px;
     text-align: center;
-    box-shadow: 0 0 30px 5px #ff00ff66;
+    box-shadow: 0 0 40px 10px #ff00ff44;
     width: 90%;
     max-width: 500px;
-    border: 1px solid #550055;
+    border: 1px solid #660066;
   }
-
   h1 {
     color: #ff6600;
-    text-shadow: 0 0 20px #ff3300;
-    font-size: 2rem;
+    text-shadow: 0 0 25px #ff3300;
+    font-size: 2.3rem;
     margin-bottom: 15px;
   }
-
   textarea {
     width: 100%;
-    background-color: #300030;
+    background-color: #2b002b;
     border: 2px solid #660066;
     border-radius: 8px;
     color: #fff;
     padding: 10px;
     font-size: 16px;
     resize: vertical;
-    box-sizing: border-box;
     margin-bottom: 20px;
   }
-
   button {
     background-color: #ff6600;
     color: white;
@@ -62,102 +56,58 @@
     transition: 0.3s;
     margin: 5px;
   }
-
   button:hover {
     background-color: #cc5200;
     transform: scale(1.05);
     box-shadow: 0 0 20px #ff3300;
-  }
-
-  button:disabled {
-    background-color: #333;
-    cursor: not-allowed;
   }
 </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>😈 The Evil Voice Generator 🔥</h1>
-    <textarea id="spookyText" rows="6" placeholder="Type your terrifying words here..."></textarea>
+    <h1>👹 The Demon Voice Portal</h1>
+    <textarea id="spookyText" rows="5" placeholder="Type your curse here..."></textarea>
     <div>
-      <button id="speakButton" onclick="speakText()">Summon the Dark Voice</button>
-      <button id="laughButton" onclick="spookyLaugh()">💀 Evil Laugh</button>
+      <button onclick="speakText()">Summon the Voice</button>
+      <button onclick="playLaugh()">💀 Evil Laugh</button>
     </div>
   </div>
+
+  <!-- Preloaded scary sounds -->
+  <audio id="laugh1" src="https://cdn.pixabay.com/download/audio/2023/02/14/audio_1c20cbad1e.mp3?filename=evil-laugh-112024.mp3"></audio>
+  <audio id="laugh2" src="https://cdn.pixabay.com/download/audio/2023/03/01/audio_d17ff5f708.mp3?filename=creepy-evil-laugh-140268.mp3"></audio>
+  <audio id="laugh3" src="https://cdn.pixabay.com/download/audio/2023/01/11/audio_1e7b8b1a8d.mp3?filename=evil-male-laugh-125649.mp3"></audio>
 
 <script>
 let lockedVoice = null;
 
-// Ensure voices are loaded and pick one consistent deep voice
+// Choose one consistent dark voice
 window.speechSynthesis.onvoiceschanged = () => {
   const voices = speechSynthesis.getVoices();
-  lockedVoice = voices.find(v =>
-    v.name.toLowerCase().includes('male') ||
-    v.name.toLowerCase().includes('daniel') ||
-    v.name.toLowerCase().includes('english') ||
-    v.name.toLowerCase().includes('guy')
-  ) || voices[0];
+  lockedVoice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('english')) || voices[0];
 };
 
-function speak(text, rate = 0.4, pitch = 0.2) {
-  if (!text) return;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.voice = lockedVoice || speechSynthesis.getVoices()[0];
-  utterance.pitch = pitch;
-  utterance.rate = rate;
-  utterance.volume = 1.0;
-
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
-}
-
 function speakText() {
-  const textarea = document.getElementById('spookyText');
-  const speakButton = document.getElementById('speakButton');
-  const text = textarea.value.trim();
-
-  if (!text) {
-    alert('Enter some words... if you dare 👁️');
-    return;
-  }
-
-  speakButton.disabled = true;
-  speakButton.textContent = '👁️ Summoning Darkness...';
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.voice = lockedVoice || speechSynthesis.getVoices()[0];
-  utterance.pitch = 0.2;
-  utterance.rate = 0.4;
-
-  utterance.onend = () => {
-    speakButton.disabled = false;
-    speakButton.textContent = 'Summon the Dark Voice';
-  };
-
+  const text = document.getElementById('spookyText').value.trim();
+  if (!text) return alert('Summon something first...');
+  
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = lockedVoice || speechSynthesis.getVoices()[0];
+  utter.pitch = 0.3;
+  utter.rate = 0.4;
+  utter.volume = 1;
+  
   window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+  window.speechSynthesis.speak(utter);
 }
 
-function spookyLaugh() {
-  const laughs = [
-    "Mwahahaha...",
-    "Heheheheheh...",
-    "AHAHAHAHAA!",
-    "Keh keh keh keh...",
-    "Bwahahaha... darkness comes..."
-  ];
-  const randomLaugh = laughs[Math.floor(Math.random() * laughs.length)];
-
-  // Deep, uneven laugh with variation
-  const utterance = new SpeechSynthesisUtterance(randomLaugh);
-  utterance.voice = lockedVoice || speechSynthesis.getVoices()[0];
-  utterance.pitch = Math.random() * 0.3 + 0.1;
-  utterance.rate = Math.random() * 0.2 + 0.4;
-  utterance.volume = 1.0;
-
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+function playLaugh() {
+  const laughs = ['laugh1', 'laugh2', 'laugh3'];
+  const pick = laughs[Math.floor(Math.random() * laughs.length)];
+  const audio = document.getElementById(pick);
+  audio.currentTime = 0;
+  audio.play();
 }
 </script>
 </body>
