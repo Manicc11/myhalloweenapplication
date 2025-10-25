@@ -1,17 +1,137 @@
-<div style="display:none;">
-  <iframe id="evilLaugh" width="560" height="315"
-    src="https://www.youtube.com/embed/jzGZqtEdEVA?autoplay=1&loop=1&playlist=jzGZqtEdEVA"
-    frameborder="0"
-    allow="autoplay">
-  </iframe>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👻 Azure Spooky Voice Generator 🔮</title>
+<style>
+  body {
+    background-color: #0b0010;
+    color: #ff33cc;
+    font-family: 'Creepster', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
 
-<button onclick="playLaugh()">😈 Evil Laugh</button>
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+  .container {
+    background: radial-gradient(circle at center, #200020 0%, #0b0010 100%);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 30px 5px #ff00ff66;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid #550055;
+  }
+
+  h1 {
+    color: #ff6600;
+    text-shadow: 0 0 20px #ff3300;
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
+
+  textarea {
+    width: 100%;
+    background-color: #300030;
+    border: 2px solid #660066;
+    border-radius: 8px;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    resize: vertical;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
+
+  button {
+    background-color: #ff6600;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background-color: #cc5200;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ff3300;
+  }
+
+  button:disabled {
+    background-color: #333;
+    cursor: not-allowed;
+  }
+</style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>😈 The Evil Voice Generator 🔥</h1>
+    <textarea id="spookyText" rows="6" placeholder="Type your terrifying words here..."></textarea>
+    <button id="speakButton" onclick="speakText()">Summon the Dark Voice</button>
+  </div>
 
 <script>
-function playLaugh() {
-  const laugh = document.getElementById('evilLaugh');
-  laugh.style.display = 'block';
-  setTimeout(() => laugh.style.display = 'none', 5000); // hide again
+const textarea = document.getElementById('spookyText');
+const speakButton = document.getElementById('speakButton');
+
+// Load voices dynamically (some browsers load them async)
+window.speechSynthesis.onvoiceschanged = () => window.availableVoices = speechSynthesis.getVoices();
+
+function speakText() {
+  const text = textarea.value.trim();
+  if (!text) {
+    alert('Enter some words... if you dare 👀');
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+
+  // Choose a deep male voice if available
+  const deepVoice = voices.find(v =>
+    v.name.toLowerCase().includes('male') ||
+    v.name.toLowerCase().includes('guy') ||
+    v.name.toLowerCase().includes('uk english male') ||
+    v.name.toLowerCase().includes('daniel')
+  );
+  if (deepVoice) utterance.voice = deepVoice;
+
+  // Evil tone settings
+  utterance.pitch = 0.2;   // Very deep
+  utterance.rate = 0.4;    // Slow and sinister
+  utterance.volume = 1.0;  // Full volume
+
+  utterance.onstart = () => {
+    speakButton.disabled = true;
+    speakButton.textContent = '👁️ Summoning Darkness...';
+  };
+
+  utterance.onend = () => {
+    speakButton.disabled = false;
+    speakButton.textContent = 'Summon the Dark Voice';
+  };
+
+  utterance.onerror = (e) => {
+    console.error(e);
+    speakButton.disabled = false;
+    speakButton.textContent = 'Try Again';
+  };
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
 }
 </script>
+</body>
+</html>
